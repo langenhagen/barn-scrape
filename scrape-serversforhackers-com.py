@@ -41,8 +41,6 @@ def scrape_video_urls(url: str = "https://serversforhackers.com/s/start-here"):
     Scrape the videos URLs from the given URL from serversforhackers.com
     and return the video page urls and corresponding video file urls.
     """
-
-    # get each video url and name
     page = get_soup(url)
     subpage_links_section = bs4.BeautifulSoup.find(
         page, "section", {"class": "bg-white py-10"}
