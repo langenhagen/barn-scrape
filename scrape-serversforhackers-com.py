@@ -52,7 +52,7 @@ def scrape_video_urls(url: str = "https://serversforhackers.com/s/start-here"):
     for subpage_url in subpage_urls:
         video_page = get_soup(subpage_url)
         script = video_page.find("script", {"type": "application/ld+json"}).text
-        video_url = json.loads(script)["embedUrl"]
+        video_url = json.loads(script, strict=False)["embedUrl"]
         print(video_url)
         video_urls.append(video_url)
     return video_urls, subpage_urls
