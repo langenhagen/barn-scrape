@@ -11,7 +11,6 @@ Call the script with a root url which contains a playlist. E.g., call:
   scrape-serversforhackers-com.py 'https://serversforhackers.com/s/start-here'
 """
 import json
-import os
 import sys
 from typing import List, Tuple
 
@@ -76,7 +75,7 @@ def run(url: str):
     and write the videos to a *.m3u playlist file on the desktop.
     """
     filename = slugify.slugify(url)
-    filepath = f"{os.environ['HOME']}/Desktop/{filename}.m3u"
+    filepath = f"{filename}.m3u"
 
     video_urls, videopage_urls = scrape_video_urls(url)
     assert len(video_urls) == len(videopage_urls)
