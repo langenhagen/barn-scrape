@@ -2,7 +2,6 @@
 """Run predefined search queries against ebay kleinanzeigen in a loop
 and notify per pushover in case a new match comes up."""
 import io
-import sys
 import time
 from typing import Set
 
@@ -42,8 +41,7 @@ def heartbeat():
     global last_hour
     hour = time.localtime().tm_hour
     if 'last_hour' not in globals() or hour != last_hour:
-        print(f"{time.asctime()} heartbeat")
-        sys.stdout.flush()
+        print(f"{time.asctime()} heartbeat", flush=True)
     last_hour = hour
 
 
