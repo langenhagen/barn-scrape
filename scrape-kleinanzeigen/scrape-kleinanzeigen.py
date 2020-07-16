@@ -36,6 +36,15 @@ def process_results(html: str, visited_links: Set[int]):
         send_pushover(f"Check out https://www.ebay-kleinanzeigen.de{link}")
 
 
+def heartbeat():
+    """Log hourly output to stdout."""
+    global last_hour
+    hour = time.localtime().tm_hour
+    if 'last_hour' not in globals() or hour != last_hour:
+        print(f"{time.asctime()} heartbeat")
+    last_hour = hour
+
+
 def main():
     """Query some ebay kleinanzeigen searches and process the results."""
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
@@ -49,12 +58,14 @@ def main():
     visited_links = set()
 
     while True:
+        heartbeat()
         for url in urls:
             response = requests.get(url, headers=headers)
             if response.ok:
                 process_results(response.text, visited_links)
             else:
                 send_pushover("Scrape Kleinanzeigen received an http error")
+                print("Scrape Kleinanzeigen received an http error")
             time.sleep(20)
         time.sleep(500)
 
