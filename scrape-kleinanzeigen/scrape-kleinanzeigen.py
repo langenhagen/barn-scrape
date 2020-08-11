@@ -2,11 +2,19 @@
 """Run predefined search queries against ebay kleinanzeigen in a loop
 and notify per pushover in case a new match comes up."""
 import io
+import logging
 import time
 from typing import Set
 
 import lxml.etree
 import requests
+
+logging.basicConfig(
+    format='%(asctime)s [%(levelname)s]: %(message)s',
+    datefmt="%a %b %d %H:%M:%S %Y",
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 
 def send_pushover(message: str):
@@ -41,7 +49,7 @@ def heartbeat():
     global last_hour
     hour = time.localtime().tm_hour
     if 'last_hour' not in globals() or hour != last_hour:
-        print(f"{time.asctime()} heartbeat", flush=True)
+        logger.info("heartbeat")
     last_hour = hour
 
 
@@ -65,10 +73,14 @@ def main():
                 process_results(response.text, visited_links)
             else:
                 send_pushover("Scrape Kleinanzeigen received an http error")
-                print("Scrape Kleinanzeigen received an http error")
+                logger.error("Scrape Kleinanzeigen received an http error")
             time.sleep(20)
         time.sleep(500)
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        try:
+            main()
+        except Exception:
+            logger.exception("Scrape Kleinanzeigen encountered an uncaught exception")
