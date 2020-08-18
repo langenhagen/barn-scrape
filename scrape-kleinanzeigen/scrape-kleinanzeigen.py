@@ -80,6 +80,7 @@ def main():
 
 if __name__ == "__main__":
     while True:
+        logger.info("Scrape Kleinanzeigen starts")
         try:
             main()
         except Exception:
