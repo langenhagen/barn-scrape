@@ -53,6 +53,21 @@ def heartbeat():
     last_hour = hour
 
 
+def handle_http_error(error_timestamps: Set[float]):
+    """Checks if there were several errors within the 30 minutes and if yes, log
+    a message and send a push notification."""
+    half_hour_ago = time.time() - 1800
+    recents = [ts for ts in error_timestamps if ts > half_hour_ago]
+    n_errors = len(recents)
+    if n_errors > 2:
+        msg = f"Scrape Kleinanzeigen received {n_errors} http errors within the last 30 minutes"
+        send_pushover(msg)
+        logger.error(msg)
+
+    error_timestamps.clear()
+    error_timestamps.update(recents)
+
+
 def main():
     """Query some ebay kleinanzeigen searches and process the results."""
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
@@ -65,6 +80,8 @@ def main():
             "(KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36")}
     visited_links = set()
 
+    error_timestamps = set()
+
     while True:
         heartbeat()
         for url in urls:
@@ -72,8 +89,7 @@ def main():
             if response.ok:
                 process_results(response.text, visited_links)
             else:
-                send_pushover("Scrape Kleinanzeigen received an http error")
-                logger.error("Scrape Kleinanzeigen received an http error")
+                handle_http_error(error_timestamps)
             time.sleep(20)
         time.sleep(500)
 
