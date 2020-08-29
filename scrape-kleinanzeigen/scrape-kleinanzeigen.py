@@ -72,8 +72,8 @@ def main():
     """Query some ebay kleinanzeigen searches and process the results."""
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
     urls = [
-        f"{prefix}/preis:100:200/croozer/k0l3331",
-        f"{prefix}/preis:100:250/thule-chariot/k0l3331"]
+        f"{prefix}/preis:100:170/croozer/k0l3331",
+        f"{prefix}/preis:100:180/thule-chariot/k0l3331"]
     headers = {
         "user-agent": (
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
