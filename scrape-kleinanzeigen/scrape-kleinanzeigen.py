@@ -8,6 +8,7 @@ from typing import Set
 
 import lxml.etree
 import requests
+import urllib3
 
 logging.basicConfig(
     format='%(asctime)s [%(levelname)s]: %(message)s',
@@ -25,7 +26,10 @@ def send_pushover(message: str):
         "token": "agna4fob6wu7e7t2ofhz1drt7ptngq",
         "user": "ucw67xi5r5mqgqo8arh3p64xkj39wu"
     }
-    return requests.post("https://api.pushover.net/1/messages.json", data)
+    try:
+        return requests.post("https://api.pushover.net/1/messages.json", data)
+    except urllib3.exceptions.MaxRetryError:
+        logger.error("Post to pushover encountered MaxRetryError. Giving up.")
 
 
 def process_results(html: str, visited_links: Set[int]):
@@ -85,12 +89,16 @@ def main():
     while True:
         heartbeat()
         for url in urls:
-            response = requests.get(url, headers=headers)
-            if response.ok:
-                process_results(response.text, visited_links)
+            try:
+                response = requests.get(url, headers=headers)
+            except urllib3.exceptions.MaxRetryError:
+                logger.error("HTTP GET encountered MaxRetryError. Giving up.")
             else:
-                handle_http_error(error_timestamps)
-            time.sleep(20)
+                if response.ok:
+                    process_results(response.text, visited_links)
+                else:
+                    handle_http_error(error_timestamps)
+                time.sleep(20)
         time.sleep(500)
 
 
