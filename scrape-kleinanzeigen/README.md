@@ -6,13 +6,10 @@ misusing their service.
 
 
 ## Setup
-Set up a Python virtual environment and install the requirements.
+Set up a Python virtual environment and install the requirements, e.g. via `setup.sh`:
 E.g., run:
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+bash setup.sh
 ```
 
 ## Run

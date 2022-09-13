@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python3
 """Run predefined search queries against ebay kleinanzeigen in a loop
 and notify per pushover in case a new match comes up."""
 import io
@@ -11,9 +11,9 @@ import requests
 import urllib3
 
 logging.basicConfig(
-    format='%(asctime)s [%(levelname)s]: %(message)s',
+    format="%(asctime)s [%(levelname)s]: %(message)s",
     datefmt="%a %b %d %H:%M:%S %Y",
-    level=logging.INFO
+    level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ def send_pushover(message: str):
     data = {
         "message": message,
         "token": "agna4fob6wu7e7t2ofhz1drt7ptngq",
-        "user": "ucw67xi5r5mqgqo8arh3p64xkj39wu"
+        "user": "ucw67xi5r5mqgqo8arh3p64xkj39wu",
     }
     try:
         return requests.post("https://api.pushover.net/1/messages.json", data)
@@ -52,7 +52,7 @@ def heartbeat():
     """Log hourly output to stdout."""
     global last_hour
     hour = time.localtime().tm_hour
-    if 'last_hour' not in globals() or hour != last_hour:
+    if "last_hour" not in globals() or hour != last_hour:
         logger.info("heartbeat")
     last_hour = hour
 
@@ -76,12 +76,14 @@ def main():
     """Query some ebay kleinanzeigen searches and process the results."""
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
     urls = [
-        f"{prefix}/preis:100:170/croozer/k0l3331",
-        f"{prefix}/preis:100:180/thule-chariot/k0l3331"]
+        f"{prefix}/preis:8:15/ps4-controller/k0l3331",
+    ]
     headers = {
         "user-agent": (
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36")}
+            "(KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
+        )
+    }
     visited_links = set()
 
     error_timestamps = set()
