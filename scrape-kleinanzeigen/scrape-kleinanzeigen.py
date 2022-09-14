@@ -38,14 +38,18 @@ def process_results(html: str, visited_links: Set[int]):
     add the hash of the link to `visited_links`
     and send a push notification."""
     tree = lxml.etree.parse(io.StringIO(html), lxml.etree.HTMLParser())
-    results = tree.xpath('//*[@id="srchrslt-adtable"]/li[*]/article/div[2]/h2/a')
+    results: list = tree.xpath('//*[@class="aditem"]')
+    logger.debug(f"{len(results)=}")
     for result in results:
-        link = result.get("href")
+        link = result.get("data-href")
+        logger.debug(f"found {link=}")
         link_hash = hash(link)
         if link_hash in visited_links:
             continue
         visited_links.add(link_hash)
         send_pushover(f"Check out https://www.ebay-kleinanzeigen.de{link}")
+
+    logger.debug("that's all for this round")
 
 
 def heartbeat():
