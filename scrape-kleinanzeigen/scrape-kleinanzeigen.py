@@ -80,7 +80,7 @@ def main():
     """Query some ebay kleinanzeigen searches and process the results."""
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
     urls = [
-        f"{prefix}/preis:8:15/ps4-controller/k0l3331",
+        f"{prefix}/preis:30:80/swoppster/k0l3331",
     ]
     headers = {
         "user-agent": (
