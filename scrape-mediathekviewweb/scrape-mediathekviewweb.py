@@ -14,7 +14,7 @@ import urllib3
 
 logging.basicConfig(
     format="%(asctime)s [%(levelname)s]: %(message)s",
-    datefmt="%H:%M:%S %Y",
+    datefmt="%T %Y",
     level=logging.INFO,
 )
 log = logging.getLogger(__name__)
