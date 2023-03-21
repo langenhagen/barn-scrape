@@ -80,7 +80,7 @@ def main():
     """Query some ebay kleinanzeigen searches and process the results."""
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
     urls = [
-        f"{prefix}/preis:100:300/samsung-galaxy-s21/k0l3331",
+        f"{prefix}/preis:100:800/samsung-galaxy-s21/k0l3331",
         f"{prefix}/preis:100:300/samsung-galaxy-s22/k0l3331",
         f"{prefix}/preis:100:300/samsung-galaxy-s23/k0l3331",
     ]
