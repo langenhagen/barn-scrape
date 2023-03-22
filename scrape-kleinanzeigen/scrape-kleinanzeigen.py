@@ -38,16 +38,34 @@ def process_results(html: str, visited_links: Set[int]):
     add the hash of the link to `visited_links`
     and send a push notification."""
     tree = lxml.etree.parse(io.StringIO(html), lxml.etree.HTMLParser())
-    results: list = tree.xpath('//*[@class="aditem"]')
+    results: list = tree.xpath('//*[@id="srchrslt-adtable"]/li[*]/article')
+
     logger.debug(f"{len(results)=}")
     for result in results:
         link = result.get("data-href")
-        logger.debug(f"found {link=}")
+        try:
+            price = result.xpath(
+                './/*[@class="aditem-main--middle--price-shipping--price"]'
+            )[0].text.strip()
+        except Exception:
+            logger.exception(
+                "Found no price tag on " f"https://www.ebay-kleinanzeigen.de{link}"
+            )
+            send_pushover(
+                "Exception: found no price tag on: "
+                f"https://www.ebay-kleinanzeigen.de{link}"
+            )
+            continue
+
+        logger.debug(f"found https://www.ebay-kleinanzeigen.de{link} for {price=}")
         link_hash = hash(link)
         if link_hash in visited_links:
             continue
         visited_links.add(link_hash)
-        send_pushover(f"Check out https://www.ebay-kleinanzeigen.de{link}")
+
+        send_pushover(
+            f"Check out https://www.ebay-kleinanzeigen.de{link}\n" f"it's {price}"
+        )
 
     logger.debug("that's all for this round")
 
@@ -80,7 +98,7 @@ def main():
     """Query some ebay kleinanzeigen searches and process the results."""
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
     urls = [
-        f"{prefix}/preis:100:800/samsung-galaxy-s21/k0l3331",
+        f"{prefix}/preis:100:250/samsung-galaxy-s21/k0l3331",
         f"{prefix}/preis:100:300/samsung-galaxy-s22/k0l3331",
         f"{prefix}/preis:100:300/samsung-galaxy-s23/k0l3331",
     ]
