@@ -49,7 +49,7 @@ def process_results(html: str, visited_links: Set[int]):
             )[0].text.strip()
         except Exception:
             logger.exception(
-                "Found no price tag on " f"https://www.ebay-kleinanzeigen.de{link}"
+                "Found no price tag on " f"https://www.kleinanzeigen.de{link}"
             )
             send_pushover(
                 "Exception: found no price tag on: "
@@ -101,6 +101,7 @@ def main():
         f"{prefix}/preis:100:220/samsung-galaxy-s21/k0l3331",
         f"{prefix}/preis:100:250/samsung-galaxy-s22/k0l3331",
         f"{prefix}/preis:100:260/samsung-galaxy-s23/k0l3331",
+        f"{prefix}/preis:1:20/star-wars-hot-wheels/k0l3331",
     ]
     headers = {
         "user-agent": (
