@@ -3,12 +3,21 @@
 and notify per pushover in case a new match comes up."""
 import io
 import logging
+import re
 import time
-from typing import Set
+from dataclasses import dataclass
+from typing import Optional, Set
 
 import lxml.etree
 import requests
 import urllib3
+
+
+@dataclass
+class SearchDetails:
+    url: str
+    negative_regex: Optional[str] = None  # discard thingy if matches
+
 
 logging.basicConfig(
     format="%(asctime)s [%(levelname)s]: %(message)s",
@@ -32,9 +41,10 @@ def send_pushover(message: str):
         logger.error("Post to pushover encountered MaxRetryError. Giving up.")
 
 
-def process_results(html: str, visited_links: Set[int]):
-    """Inspect links on ebay kleinanzeigen search result page,
-    check if the hash of the link is already in the set `visited_links`,
+def process_results(html: str, negative_regex: Optional[str], visited_links: Set[int]):
+    """Inspect links on Kleinanzeigen search result page,
+    check if the negative regex matchies.
+    If not, check if the hash of the link is already in the set `visited_links`,
     add the hash of the link to `visited_links`
     and send a push notification."""
     tree = lxml.etree.parse(io.StringIO(html), lxml.etree.HTMLParser())
@@ -43,6 +53,9 @@ def process_results(html: str, visited_links: Set[int]):
     logger.debug(f"{len(results)=}")
     for result in results:
         link = result.get("data-href")
+        if negative_regex and re.search(negative_regex, link, flags=re.IGNORECASE):
+            continue
+
         try:
             price = result.xpath(
                 './/*[@class="aditem-main--middle--price-shipping--price"]'
@@ -97,11 +110,20 @@ def handle_http_error(error_timestamps: Set[float]):
 def main():
     """Query some ebay kleinanzeigen searches and process the results."""
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
-    urls = [
-        f"{prefix}/preis:100:220/samsung-galaxy-s21/k0l3331",
-        f"{prefix}/preis:100:250/samsung-galaxy-s22/k0l3331",
-        f"{prefix}/preis:100:260/samsung-galaxy-s23/k0l3331",
-        f"{prefix}/preis:1:20/star-wars-hot-wheels/k0l3331",
+    searches = [
+        SearchDetails(
+            f"{prefix}/preis:100:220/samsung-galaxy-s21/k0l3331",
+            negative_regex="schaden|defekt",
+        ),
+        SearchDetails(
+            f"{prefix}/preis:100:250/samsung-galaxy-s22/k0l3331",
+            negative_regex="schaden|defekt",
+        ),
+        SearchDetails(
+            f"{prefix}/preis:100:260/samsung-galaxy-s23/k0l3331",
+            negative_regex="schaden|defekt",
+        ),
+        SearchDetails(f"{prefix}/preis:1:20/star-wars-hot-wheels/k0l3331"),
     ]
     headers = {
         "user-agent": (
@@ -115,14 +137,18 @@ def main():
 
     while True:
         heartbeat()
-        for url in urls:
+        for search in searches:
             try:
-                response = requests.get(url, headers=headers)
+                response = requests.get(search.url, headers=headers)
             except urllib3.exceptions.MaxRetryError:
                 logger.error("HTTP GET encountered MaxRetryError. Giving up.")
             else:
                 if response.ok:
-                    process_results(response.text, visited_links)
+                    process_results(
+                        response.text,
+                        negative_regex=search.negative_regex,
+                        visited_links=visited_links,
+                    )
                 else:
                     handle_http_error(error_timestamps)
                 time.sleep(20)
