@@ -112,16 +112,16 @@ def main():
     prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
     searches = [
         SearchDetails(
-            f"{prefix}/preis:100:220/samsung-galaxy-s21/k0l3331",
-            negative_regex="schaden|defekt",
+            f"{prefix}/preis:100:180/samsung-galaxy-s21/k0l3331",
+            negative_regex="schaden|defekt|reparatur",
         ),
         SearchDetails(
-            f"{prefix}/preis:100:250/samsung-galaxy-s22/k0l3331",
-            negative_regex="schaden|defekt",
+            f"{prefix}/preis:100:200/samsung-galaxy-s22/k0l3331",
+            negative_regex="schaden|defekt|reparatur",
         ),
         SearchDetails(
-            f"{prefix}/preis:100:260/samsung-galaxy-s23/k0l3331",
-            negative_regex="schaden|defekt",
+            f"{prefix}/preis:100:230/samsung-galaxy-s23/k0l3331",
+            negative_regex="schaden|defekt|reparatur",
         ),
         SearchDetails(f"{prefix}/preis:1:20/star-wars-hot-wheels/k0l3331"),
     ]
