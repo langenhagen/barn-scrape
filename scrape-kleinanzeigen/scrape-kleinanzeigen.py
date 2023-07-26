@@ -124,6 +124,7 @@ def main():
             negative_regex="schaden|defekt|reparatur",
         ),
         SearchDetails(f"{prefix}/preis:1:20/star-wars-hot-wheels/k0l3331"),
+        SearchDetails(f"{prefix}/preis:1:100/nike-free-run-2-46/k0"),
     ]
     headers = {
         "user-agent": (
