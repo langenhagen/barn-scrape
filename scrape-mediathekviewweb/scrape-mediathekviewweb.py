@@ -1,4 +1,4 @@
-#!/usr/env/bin python
+#!/usr/bin/env python
 """Request the given Feed-URL from mediathekviewweb.de and download all search
 result videos."""
 import datetime as dt
