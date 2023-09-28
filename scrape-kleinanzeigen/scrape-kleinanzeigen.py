@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run predefined search queries against ebay kleinanzeigen in a loop
 and notify per pushover in case a new match comes up."""
-import io
+from io import StringIO
 import logging
 import re
 import time
@@ -47,7 +47,7 @@ def process_results(html: str, negative_regex: Optional[str], visited_links: Set
     If not, check if the hash of the link is already in the set `visited_links`,
     add the hash of the link to `visited_links`
     and send a push notification."""
-    tree = lxml.etree.parse(io.StringIO(html), lxml.etree.HTMLParser())
+    tree = lxml.etree.parse(StringIO(html), lxml.etree.HTMLParser())
     results: list = tree.xpath('//*[@id="srchrslt-adtable"]/li[*]/article')
 
     logger.debug(f"{len(results)=}")
