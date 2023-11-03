@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 """Request the given Feed-URL from mediathekviewweb.de and download all search
-result videos."""
+result videos.
+
+Use like:
+
+  ./scrape-mediathekviewweb.py 'https://mediathekviewweb.de/feed?query=drache kokosnuss&future=false'
+"""
 import datetime as dt
 import logging
 import pathlib
