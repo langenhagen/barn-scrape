@@ -1,10 +1,16 @@
-#!/usr/bin/env python
-"""Request the given Feed-URL from mediathekviewweb.de and download all search
+#!/usr/bin/env python3
+"""
+Request the given Feed-URL from mediathekviewweb.de and download all search
 result videos.
 
 Use like:
 
   ./scrape-mediathekviewweb.py 'https://mediathekviewweb.de/feed?query=drache kokosnuss&future=false'
+
+
+Note:
+Caps the results to 50. I guess this is since this scraper bases on the RSS
+document.
 """
 import datetime as dt
 import logging
@@ -56,7 +62,7 @@ def process_results(url: str, feed: bytes):
 
 
 def main(url: str):
-    """Query a search at the given URL, a mediathekviewweb.de search rss feed
+    """Query a search at the given URL, a mediathekviewweb.de search RSS feed
     URL, and download all results in the best quality."""
 
     try:
