@@ -4,12 +4,11 @@
 #
 # Usage:
 #
-#   scripts/setup.sh [--dev] [--clean]
+#   scripts/setup.sh [--clean]
 #
 # Examples:
 #
 #   scripts/setup.sh               # set up the project
-#   scripts/setup.sh --dev         # set up the project including development packages
 #   scripts/setup.sh --clean       # clean already existing artifacts and set up the project
 #   scripts/setup.sh --dev --clean # clean artifacts and set the project up for development
 set -e
