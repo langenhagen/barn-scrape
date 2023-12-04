@@ -23,6 +23,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s]: %(message)s",
     datefmt="%a %b %d %T %Y",
     level=logging.INFO,
+    # level=logging.DEBUG,
 )
 logger = logging.getLogger(__name__)
 
@@ -66,18 +67,18 @@ def process_results(html: str, negative_regex: Optional[str], visited_links: Set
             )
             send_pushover(
                 "Exception: found no price tag on: "
-                f"https://www.ebay-kleinanzeigen.de{link}"
+                f"https://www.kleinanzeigen.de{link}"
             )
             continue
 
-        logger.debug(f"found https://www.ebay-kleinanzeigen.de{link} for {price=}")
+        logger.debug(f"found https://www.kleinanzeigen.de{link} for {price=}")
         link_hash = hash(link)
         if link_hash in visited_links:
             continue
         visited_links.add(link_hash)
 
         send_pushover(
-            f"Check out https://www.ebay-kleinanzeigen.de{link}\n" f"it's {price}"
+            f"Check out https://www.kleinanzeigen.de{link}\n" f"it's {price}"
         )
 
     logger.debug("that's all for this round")
@@ -108,8 +109,8 @@ def handle_http_error(error_timestamps: Set[float]):
 
 
 def main():
-    """Query some ebay kleinanzeigen searches and process the results."""
-    prefix = "https://www.ebay-kleinanzeigen.de/s-berlin/anzeige:angebote"
+    """Query some kleinanzeigen searches and process the results."""
+    prefix = "https://www.kleinanzeigen.de/s-berlin/anzeige:angebote"
     searches = [
         SearchDetails(
             f"{prefix}/preis:100:150/samsung-galaxy-s21/k0l3331",
