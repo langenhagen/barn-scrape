@@ -63,7 +63,7 @@ def process_results(html: str, negative_regex: Optional[str], visited_links: Set
             )[0].text.strip()
         except Exception:
             logger.exception(
-                "Found no price tag on " f"https://www.kleinanzeigen.de{link}"
+                "Found no price tag on https://www.kleinanzeigen.de%s", link
             )
             send_pushover(
                 "Exception: found no price tag on: "
@@ -71,7 +71,7 @@ def process_results(html: str, negative_regex: Optional[str], visited_links: Set
             )
             continue
 
-        logger.debug(f"found https://www.kleinanzeigen.de{link} for {price=}")
+        logger.debug(f"found https://www.kleinanzeigen.de%s for price=%d", link, price)
         link_hash = hash(link)
         if link_hash in visited_links:
             continue
