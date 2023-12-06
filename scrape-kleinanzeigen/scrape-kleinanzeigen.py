@@ -152,6 +152,11 @@ def main():
                         visited_links=visited_links,
                     )
                 else:
+                    logger.error(
+                        f"HTTP GET %s encountered error %d",
+                        response.url,
+                        response.status_code,
+                    )
                     handle_http_error(error_timestamps)
                 time.sleep(20)
         time.sleep(500)
