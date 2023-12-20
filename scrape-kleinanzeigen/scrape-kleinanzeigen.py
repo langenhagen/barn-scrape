@@ -113,7 +113,7 @@ def main():
     prefix = "https://www.kleinanzeigen.de/s-berlin/anzeige:angebote"
     searches = [
         SearchDetails(
-            f"{prefix}/preis:100:150/samsung-galaxy-s21/k0l3331",
+            f"{prefix}/preis:100:160/samsung-galaxy-s21/k0l3331",
             negative_regex="schaden|defekt|reparatur",
         ),
         SearchDetails(
@@ -124,7 +124,6 @@ def main():
             f"{prefix}/preis:100:220/samsung-galaxy-s23/k0l3331",
             negative_regex="schaden|defekt|reparatur",
         ),
-        SearchDetails(f"{prefix}/versand:ja/preis:2:10/tamper-51/k0"),
         SearchDetails(f"{prefix}/preis:1:100/nike-free-run-2-46/k0"),
     ]
     headers = {
