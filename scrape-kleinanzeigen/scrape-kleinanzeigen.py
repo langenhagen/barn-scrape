@@ -110,21 +110,22 @@ def handle_http_error(error_timestamps: Set[float]):
 
 def main():
     """Query some kleinanzeigen searches and process the results."""
-    prefix = "https://www.kleinanzeigen.de/s-berlin/anzeige:angebote"
+    prefix = "https://www.kleinanzeigen.de/anzeige:angebote"
     searches = [
-        SearchDetails(
-            f"{prefix}/preis:100:160/samsung-galaxy-s21/k0l3331",
-            negative_regex="schaden|defekt|reparatur",
-        ),
-        SearchDetails(
-            f"{prefix}/preis:100:200/samsung-galaxy-s22/k0l3331",
-            negative_regex="schaden|defekt|reparatur",
-        ),
-        SearchDetails(
-            f"{prefix}/preis:100:220/samsung-galaxy-s23/k0l3331",
-            negative_regex="schaden|defekt|reparatur",
-        ),
-        SearchDetails(f"{prefix}/preis:1:100/nike-free-run-2-46/k0"),
+        # SearchDetails(
+        #     f"{prefix}/preis:100:160/samsung-galaxy-s21/k0l3331",
+        #     negative_regex="schaden|defekt|reparatur",
+        # ),
+        # SearchDetails(
+        #     f"{prefix}/preis:100:200/samsung-galaxy-s22/k0l3331",
+        #     negative_regex="schaden|defekt|reparatur",
+        # ),
+        # SearchDetails(
+        #     f"{prefix}/preis:100:220/samsung-galaxy-s23/k0l3331",
+        #     negative_regex="schaden|defekt|reparatur",
+        # ),
+        # SearchDetails(f"{prefix}/preis:1:100/nike-free-run-2-46/k0"),
+        SearchDetails(f"{prefix}/preis:120:200/varier-move/k0"),
     ]
     headers = {
         "user-agent": (
