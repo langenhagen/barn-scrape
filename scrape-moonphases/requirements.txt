@@ -1,0 +1,5 @@
+bpython
+lxml
+requests
+types-requests
+urllib3
