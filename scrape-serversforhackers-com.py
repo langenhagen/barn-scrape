@@ -10,9 +10,9 @@ Usage:
 Call the script with a root url which contains a playlist. E.g., call:
   scrape-serversforhackers-com.py 'https://serversforhackers.com/s/start-here'
 """
+
 import json
 import sys
-from typing import List, Tuple
 
 import bs4
 import requests
@@ -25,7 +25,7 @@ def get_soup(url: str):
     return bs4.BeautifulSoup(response.content, "html5lib")
 
 
-def find_link_urls(soup, url_substring: str = "") -> List[str]:
+def find_link_urls(soup, url_substring: str = "") -> list[str]:
     """Get all link URLs that contain the given substring from a given soup."""
     results = []
     for a in soup.find_all("a", href=True):
@@ -57,7 +57,7 @@ def scrape_video_urls(url: str = "https://serversforhackers.com/s/start-here"):
     return video_urls, subpage_urls
 
 
-def write_m3u(filepath: str, paths_and_names: List[Tuple[str, str]]):
+def write_m3u(filepath: str, paths_and_names: list[tuple[str, str]]) -> None:
     """
     Write given paths of media files with their according names to a
     *.m3u playlist file.
@@ -69,7 +69,7 @@ def write_m3u(filepath: str, paths_and_names: List[Tuple[str, str]]):
             file.write(f"{path}\n")
 
 
-def run(url: str):
+def run(url: str) -> None:
     """
     Scrape the videos URLs from the given URL from serversforhackers.com
     and write the videos to a *.m3u playlist file on the desktop.
@@ -83,7 +83,7 @@ def run(url: str):
     video_names = []
     prefix = "http://serversforhackers.com/c/"
     for i, videopage_url in enumerate(videopage_urls, 1):
-        video_names.append(f"{i} {videopage_url[len(prefix):]}")
+        video_names.append(f"{i} {videopage_url[len(prefix) :]}")
 
     video_paths_and_names = list(zip(video_urls, video_names))
     write_m3u(filepath, video_paths_and_names)

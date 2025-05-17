@@ -26,8 +26,7 @@ def generate_friday_saturday_dates() -> list[dt.date]:
     ]
 
     # keep only Fridays and Saturdays
-    dates = [d for d in dates if d.weekday() in {4, 5}]
-    return dates
+    return [d for d in dates if d.weekday() in {4, 5}]
 
 
 def get_moonrise_and_moonset(date: dt.datetime) -> tuple[dt.datetime, dt.datetime]:

@@ -12,6 +12,7 @@ Note:
 Caps the results to 50. I guess this is since this scraper bases on the RSS
 document.
 """
+
 import datetime as dt
 import logging
 import pathlib
@@ -31,14 +32,14 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-def download_file(folder: pathlib.Path, filename: str, url: str):
+def download_file(folder: pathlib.Path, filename: str, url: str) -> None:
     """Download the data from the given link to the file with the given name."""
     resp = requests.get(url, allow_redirects=True)
     resp.raise_for_status()
     open(folder / filename, "wb").write(resp.content)
 
 
-def process_results(url: str, feed: bytes):
+def process_results(url: str, feed: bytes) -> None:
     """Inspect links on mediathekviewweb.de search result page,
     check if the hash of the link is already in the set `visited_links`,
     add the hash of the link to `visited_links`
@@ -61,7 +62,7 @@ def process_results(url: str, feed: bytes):
         download_file(folder, filename, item_map["link"])
 
 
-def main(url: str):
+def main(url: str) -> None:
     """Query a search at the given URL, a mediathekviewweb.de search RSS feed
     URL, and download all results in the best quality."""
 
@@ -75,7 +76,6 @@ def main(url: str):
 
 
 if __name__ == "__main__":
-
     if len(sys.argv) != 2:
         base = f"python {sys.argv[0]} 'https://mediathekviewweb.de/feed?query="
         print(f"Usage:\n  {base}<query>'\n")

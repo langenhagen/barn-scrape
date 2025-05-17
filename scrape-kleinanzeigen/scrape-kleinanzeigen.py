@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Run predefined search queries against ebay kleinanzeigen in a loop
 and notify per pushover in case a new match comes up."""
-from io import StringIO
+
 import logging
 import re
 import time
 from dataclasses import dataclass
-from typing import Optional, Set
+from io import StringIO
 
 import lxml.etree
 import requests
@@ -16,7 +16,7 @@ import urllib3
 @dataclass
 class SearchDetails:
     url: str
-    negative_regex: Optional[str] = None  # discard thingy if matches
+    negative_regex: str | None = None  # discard thingy if matches
 
 
 logging.basicConfig(
@@ -42,7 +42,11 @@ def send_pushover(message: str):
         logger.error("Post to pushover encountered MaxRetryError. Giving up.")
 
 
-def process_results(html: str, negative_regex: Optional[str], visited_links: Set[int]):
+def process_results(
+    html: str,
+    negative_regex: str | None,
+    visited_links: set[int],
+) -> None:
     """Inspect links on Kleinanzeigen search result page,
     check if the negative regex matchies.
     If not, check if the hash of the link is already in the set `visited_links`,
@@ -66,8 +70,7 @@ def process_results(html: str, negative_regex: Optional[str], visited_links: Set
                 "Found no price tag on https://www.kleinanzeigen.de%s", link
             )
             send_pushover(
-                "Exception: found no price tag on: "
-                f"https://www.kleinanzeigen.de{link}"
+                f"Exception: found no price tag on: https://www.kleinanzeigen.de{link}"
             )
             continue
 
@@ -77,14 +80,12 @@ def process_results(html: str, negative_regex: Optional[str], visited_links: Set
             continue
         visited_links.add(link_hash)
 
-        send_pushover(
-            f"Check out https://www.kleinanzeigen.de{link}\n" f"it's {price}"
-        )
+        send_pushover(f"Check out https://www.kleinanzeigen.de{link}\nit's {price}")
 
     logger.debug("that's all for this round")
 
 
-def heartbeat():
+def heartbeat() -> None:
     """Log hourly output to stdout."""
     global last_hour
     hour = time.localtime().tm_hour
@@ -93,7 +94,7 @@ def heartbeat():
     last_hour = hour
 
 
-def handle_http_error(error_timestamps: Set[float]):
+def handle_http_error(error_timestamps: set[float]) -> None:
     """Checks if there were several errors within the 30 minutes and if yes, log
     a message and send a push notification."""
     half_hour_ago = time.time() - 1800
@@ -108,7 +109,7 @@ def handle_http_error(error_timestamps: Set[float]):
     error_timestamps.update(recents)
 
 
-def main():
+def main() -> None:
     """Query some kleinanzeigen searches and process the results."""
     prefix = "https://www.kleinanzeigen.de/anzeige:angebote"
     searches = [
