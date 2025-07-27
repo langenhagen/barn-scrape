@@ -130,8 +130,7 @@ def main() -> None:
         #     f"{prefix}/preis:100:220/samsung-galaxy-s23/k0l3331",
         #     negative_regex="schaden|defekt|reparatur",
         # ),
-        # SearchDetails(f"{prefix}/preis:1:100/nike-free-run-2-46/k0"),
-        SearchDetails(f"{prefix}/preis:120:200/varier-move/k0"),
+        SearchDetails(f"{prefix}/preis:25:30/mario-kart-8-deluxe/k0l3331"),
     ]
     headers = {
         "user-agent": (
