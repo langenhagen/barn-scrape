@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Run predefined search queries against ebay kleinanzeigen in a loop
-and notify per pushover in case a new match comes up."""
+and notify per pushover in case a new match comes up.
+"""
 
 import logging
 import re
 import time
 from dataclasses import dataclass
 from io import StringIO
+from typing import Optional
 
 import lxml.etree
 import requests
@@ -16,7 +18,7 @@ import urllib3
 @dataclass
 class SearchDetails:
     url: str
-    negative_regex: str | None = None  # discard thingy if matches
+    negative_regex: Optional[str] = None  # discard thingy if matches
 
 
 logging.basicConfig(
@@ -30,7 +32,8 @@ logger = logging.getLogger(__name__)
 
 def send_pushover(message: str):
     """Send a push notification with the given message
-    via the service `pushover.net`."""
+    via the service `pushover.net`.
+    """
     data = {
         "message": message,
         "token": "agna4fob6wu7e7t2ofhz1drt7ptngq",
@@ -44,14 +47,15 @@ def send_pushover(message: str):
 
 def process_results(
     html: str,
-    negative_regex: str | None,
+    negative_regex: Optional[str],
     visited_links: set[int],
 ) -> None:
     """Inspect links on Kleinanzeigen search result page,
     check if the negative regex matchies.
     If not, check if the hash of the link is already in the set `visited_links`,
     add the hash of the link to `visited_links`
-    and send a push notification."""
+    and send a push notification.
+    """
     tree = lxml.etree.parse(StringIO(html), lxml.etree.HTMLParser())
     results: list = tree.xpath('//*[@id="srchrslt-adtable"]/li[*]/article')
 
@@ -74,7 +78,7 @@ def process_results(
             )
             continue
 
-        logger.debug(f"found https://www.kleinanzeigen.de%s for price=%d", link, price)
+        logger.debug("found https://www.kleinanzeigen.de%s for price=%d", link, price)
         link_hash = hash(link)
         if link_hash in visited_links:
             continue
@@ -95,8 +99,9 @@ def heartbeat() -> None:
 
 
 def handle_http_error(error_timestamps: set[float]) -> None:
-    """Checks if there were several errors within the 30 minutes and if yes, log
-    a message and send a push notification."""
+    """Check if there were several errors within the 30 minutes and if yes, log
+    a message and send a push notification.
+    """
     half_hour_ago = time.time() - 1800
     recents = [ts for ts in error_timestamps if ts > half_hour_ago]
     n_errors = len(recents)
@@ -154,7 +159,7 @@ def main() -> None:
                     )
                 else:
                     logger.error(
-                        f"HTTP GET %s encountered error %d",
+                        "HTTP GET %s encountered error %d",
                         response.url,
                         response.status_code,
                     )
