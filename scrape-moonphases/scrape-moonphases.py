@@ -41,7 +41,7 @@ def get_moonrise_and_moonset(date: dt.datetime) -> tuple[dt.datetime, dt.datetim
     response = requests.get(url)
     response.raise_for_status()
 
-    # Caution: the xpath items here don't use the `table/tbody` paths as
+    # CAUTION: the xpath items here don't use the `table/tbody` paths as
     # Google Chrome gives them out; rather, here, only `table/` gets used,
     # otherwise, lxml does not find a thing under `[...]/table/tbody/`.
     moonrise_xpath = "/html/body/div/div/main/div[3]/div[1]/table/tr[2]/td"
@@ -90,7 +90,9 @@ def find_dates_when_moon_is_not_visible() -> None:
     min_time = dt.time(19, 0)
     max_time = dt.time(22, 0)
 
-    print(f"Moon is not visible between {min_time} and {max_time} on following dates:\n")
+    print(
+        f"Moon is not visible between {min_time} and {max_time} on following dates:\n"
+    )
 
     for date in generate_friday_saturday_dates():
         moonrise, moonset = get_moonrise_and_moonset(date)
