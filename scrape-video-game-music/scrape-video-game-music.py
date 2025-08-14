@@ -3,7 +3,7 @@
 
 E.g.:
 
-    python scrape-video-game-music.py 'https://downloads.khinsider.com/game-soundtracks/album/minecraft'
+    python scrape-video-game-music.py 'https://downloads.khinsider.com/game-soundtracks/album/minecraft' 'out-dir'
 
 author: andreasl
 """

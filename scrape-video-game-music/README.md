@@ -14,5 +14,5 @@ Run the script in the virtual environment you created when you set the project u
 E.g., run:
 ```bash
 source .venv/bin/activate
-python scrape-video-game-music.py
+python scrape-video-game-music.py 'https://downloads.khinsider.com/game-soundtracks/album/minecraft' 'out-dir'
 ```
