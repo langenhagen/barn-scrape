@@ -119,10 +119,6 @@ def main() -> None:
     prefix = "https://www.kleinanzeigen.de/anzeige:angebote"
     searches = [
         # SearchDetails(
-        #     f"{prefix}/preis:100:160/samsung-galaxy-s21/k0l3331",
-        #     negative_regex="schaden|defekt|reparatur",
-        # ),
-        # SearchDetails(
         #     f"{prefix}/preis:100:200/samsung-galaxy-s22/k0l3331",
         #     negative_regex="schaden|defekt|reparatur",
         # ),
@@ -130,7 +126,7 @@ def main() -> None:
         #     f"{prefix}/preis:100:220/samsung-galaxy-s23/k0l3331",
         #     negative_regex="schaden|defekt|reparatur",
         # ),
-        SearchDetails(f"{prefix}/preis:25:30/mario-kart-8-deluxe/k0l3331"),
+        SearchDetails(f"{prefix}/preis:15:30/yoshi%27s-crafted-world/k0l3331"),
     ]
     headers = {
         "user-agent": (
