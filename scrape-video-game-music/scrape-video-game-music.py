@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Scrape Music from https://downloads.khinsider.com/.
 
+Creates the out dir if it doesn't exist.
+
 E.g.:
 
     python scrape-video-game-music.py 'https://downloads.khinsider.com/game-soundtracks/album/minecraft' 'out-dir'
