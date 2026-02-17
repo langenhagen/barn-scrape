@@ -127,6 +127,7 @@ def main() -> None:
         #     negative_regex="schaden|defekt|reparatur",
         # ),
         SearchDetails(f"{prefix}/preis:15:30/yoshi%27s-crafted-world/k0l3331"),
+        SearchDetails(f"{prefix}/preis::150/vestimed/k0"),
     ]
     headers = {
         "user-agent": (
