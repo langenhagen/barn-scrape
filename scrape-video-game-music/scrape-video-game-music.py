@@ -80,7 +80,10 @@ def main() -> None:
     """Program main entry point."""
 
     if len(sys.argv) != 3:
-        print(f"usage: {sys.argv[0]} <ALBUM_URL> <OUT_DIR>")
+        print(
+            f"usage: {sys.argv[0]} <ALBUM_URL> <OUT_DIR> "
+            "(OUT_DIR is created if missing)"
+        )
         sys.exit(1)
 
     url = sys.argv[1]
