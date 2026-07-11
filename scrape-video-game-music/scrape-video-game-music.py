@@ -11,6 +11,7 @@ author: andreasl
 """
 
 import sys
+import time
 from contextlib import suppress
 from io import StringIO
 from pathlib import Path
@@ -27,24 +28,46 @@ headers = {
 }
 
 
-def download_song(song_url: str, out_dir: Path) -> None:
-    """Download a song."""
+def format_size(num_bytes: int) -> str:
+    """Format a byte count as a human-readable size, e.g. `3.1 MiB`."""
+    size = float(num_bytes)
+    for unit in ("B", "KiB", "MiB", "GiB"):
+        if size < 1024 or unit == "GiB":
+            return f"{size:.1f} {unit}"
+        size /= 1024
+    raise AssertionError("unreachable")
+
+
+def format_duration(seconds: float) -> str:
+    """Format an elapsed duration, e.g. `48s` or `12m 04s`."""
+    minutes, secs = divmod(int(seconds), 60)
+    if minutes:
+        return f"{minutes}m {secs:02d}s"
+    return f"{secs}s"
+
+
+def download_song(song_url: str, out_dir: Path, index: int, total: int) -> int:
+    """Download a song and return the number of bytes written."""
     filename = unquote(song_url.split("/")[-1])
     out_path = out_dir / filename
 
     resp = requests.get(song_url, headers=headers, stream=True)
     resp.raise_for_status()
 
+    size = 0
     with out_path.open("wb") as f:
         for chunk in resp.iter_content(chunk_size=8192):
             if chunk:
-                f.write(chunk)
-    print(f"saved: {out_path}")
+                size += f.write(chunk)
+
+    counter = f"{index:>{len(str(total))}}/{total}"
+    print(f"[{counter}] {filename}  ({format_size(size)})")
+    return size
 
 
-def scrape_song_page(song_page_url: str, out_dir: Path) -> None:
+def scrape_song_page(song_page_url: str, out_dir: Path, index: int, total: int) -> int:
     """Scrape single song page, find audio source, and download song to given
-    output dir.
+    output dir. Return the number of bytes written.
     """
     resp = requests.get(song_page_url, headers=headers)
     resp.raise_for_status()
@@ -52,7 +75,7 @@ def scrape_song_page(song_page_url: str, out_dir: Path) -> None:
     audio_elem = page_tree.xpath('//*[@id="audio"]')
 
     audio_src = audio_elem[0].attrib.get("src")
-    download_song(audio_src, out_dir)
+    return download_song(audio_src, out_dir, index, total)
 
 
 def scrape_album_page(album_page_url: str, out_dir: Path) -> None:
@@ -70,10 +93,18 @@ def scrape_album_page(album_page_url: str, out_dir: Path) -> None:
     xpath = "/html/body/div[1]/div[2]/div/table[2]/tr[*]/td[4]/a"
     link_to_song_page: list = tree.xpath(xpath)
 
-    for link in link_to_song_page:
+    total = len(link_to_song_page)
+    print(f"Downloading {total} tracks to {out_dir}\n")
+
+    start = time.monotonic()
+    total_bytes = 0
+    for index, link in enumerate(link_to_song_page, 1):
         href = link.attrib.get("href")
         song_page_url = urljoin(album_page_url, href)
-        scrape_song_page(song_page_url, out_dir)
+        total_bytes += scrape_song_page(song_page_url, out_dir, index, total)
+
+    elapsed = format_duration(time.monotonic() - start)
+    print(f"\nDone: {total} tracks, {format_size(total_bytes)} in {elapsed}")
 
 
 def main() -> None:
