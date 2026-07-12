@@ -1,5 +1,0 @@
-lxml
-python-dateutil
-python-slugify
-requests
-urllib3

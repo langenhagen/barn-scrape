@@ -1,0 +1,10 @@
+[project]
+name = "scrape-mediathekviewweb"
+version = "0.1.0"
+dependencies = [
+    "lxml",
+    "python-dateutil",
+    "python-slugify",
+    "requests",
+    "urllib3",
+]

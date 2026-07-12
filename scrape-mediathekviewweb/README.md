@@ -6,20 +6,14 @@ https://github.com/mediathekview/mediathekviewweb.
 
 
 ## Setup
-Set up a Python virtual environment and install the requirements.
-E.g., run:
+Install the dependencies with [uv](https://docs.astral.sh/uv/):
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+uv sync
 ```
 
 ## Run
-Run the script in the virtual environment you created when you set the project up.
 Provide the URL that matches your search on https://mediathekviewweb.de.
 E.g., run:
 ```bash
-source .venv/bin/activate
-python scrape-mediathekviewweb.py https://mediathekviewweb.de/#query=die%20biene%maja
+uv run scrape-mediathekviewweb.py https://mediathekviewweb.de/#query=die%20biene%maja
 ```
