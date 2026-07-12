@@ -152,7 +152,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "lxml" },
+    { name = "lxml", specifier = ">=6.1.0,<7" },
     { name = "python-dateutil" },
     { name = "python-slugify" },
     { name = "requests" },

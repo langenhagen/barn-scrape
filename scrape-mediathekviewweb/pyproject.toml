@@ -2,7 +2,7 @@
 name = "scrape-mediathekviewweb"
 version = "0.1.0"
 dependencies = [
-    "lxml",
+    "lxml>=6.1.0,<7",
     "python-dateutil",
     "python-slugify",
     "requests",
