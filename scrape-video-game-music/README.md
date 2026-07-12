@@ -3,16 +3,13 @@ Scrape music from https://downloads.khinsider.com/.
 
 
 ## Setup
-Set up a Python virtual environment and install the requirements, e.g. via `setup.sh`:
-E.g., run:
+Install the dependencies with [uv](https://docs.astral.sh/uv/):
 ```bash
-bash setup.sh
+uv sync
 ```
 
 ## Run
-Run the script in the virtual environment you created when you set the project up.
 E.g., run:
 ```bash
-source .venv/bin/activate
-python scrape-video-game-music.py 'https://downloads.khinsider.com/game-soundtracks/album/minecraft' 'out-dir'
+uv run scrape-video-game-music.py 'https://downloads.khinsider.com/game-soundtracks/album/minecraft' 'out-dir'
 ```
