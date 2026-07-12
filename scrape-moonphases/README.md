@@ -3,16 +3,13 @@ Scrape info about the moon from https://www.heute-am-himmel.de/.
 
 
 ## Setup
-Set up a Python virtual environment and install the requirements, e.g. via `setup.sh`:
-E.g., run:
+Install the dependencies with [uv](https://docs.astral.sh/uv/):
 ```bash
-bash setup.sh
+uv sync
 ```
 
 ## Run
-Run the script in the virtual environment you created when you set the project up.
-E.g., run:
+Run the script via uv:
 ```bash
-source .venv/bin/activate
-python scrape-moonphases.py
+uv run scrape-moonphases.py
 ```

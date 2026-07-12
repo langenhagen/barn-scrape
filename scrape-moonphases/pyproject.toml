@@ -1,0 +1,11 @@
+[project]
+name = "scrape-moonphases"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "bpython",
+    "lxml>=5.3.0,<6",
+    "requests",
+    "types-requests",
+    "urllib3",
+]
